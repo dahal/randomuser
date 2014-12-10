@@ -23,19 +23,18 @@ module Randomuser
 
   private
 
-    def self.api_url(query='')
-      "http://api.randomuser.me/#{Randomuser::VERSION}/?#{query}"
-    end
-  
-    def self.request(query='')
-      uri  = URI.parse(self.api_url(query))
-      http = Net::HTTP.new(uri.host, uri.port)
+  def self.api_url(query='')
+    "http://api.randomuser.me/#{Randomuser::VERSION}/?#{query}"
+  end
 
-      http.start do |connection|
-        response = connection.send_request(:get, uri.request_uri)
-        response = JSON.parse(response.body, symbolize_names: true)
-        response[:results]
-      end
-    end
+  def self.request(query='')
+    uri  = URI.parse(self.api_url(query))
+    http = Net::HTTP.new(uri.host, uri.port)
 
+    http.start do |connection|
+      response = connection.send_request('GET', uri.request_uri)
+      response = JSON.parse(response.body, symbolize_names: true)
+      response[:results]
+    end
+  end
 end
